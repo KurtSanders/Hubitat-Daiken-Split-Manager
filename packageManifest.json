@@ -1,0 +1,28 @@
+{
+  "packageName": "Daiken Split Manager",
+  "author": "Kurt Sanders",
+  "version": "1.0.0",
+  "minimumHEVersion": "2.3.5",
+  "dateReleased": "2026-11-20",
+  "documentationLink": "https://github.com/kurtsanders/Hubitat-Daiken-Split-Manager#readme",
+  "apps": [
+    {
+      "id": "d8e9a4c1-7b32-4f10-9a61-2c8e5d4b1001",
+      "name": "Daiken Split Manager",
+      "namespace": "kurtsanders",
+      "location": "https://raw.githubusercontent.com/kurtsanders/Hubitat-Daiken-Split-Manager/main/apps/daiken-split-manager.groovy",
+      "required": true,
+      "oauth": false,
+      "primary": true
+    }
+  ],
+  "drivers": [
+    {
+      "id": "d8e9a4c1-7b32-4f10-9a61-2c8e5d4b1002",
+      "name": "Daiken Split System",
+      "namespace": "kurtsanders",
+      "location": "https://raw.githubusercontent.com/kurtsanders/Hubitat-Daiken-Split-Manager/main/drivers/daiken-split-system.groovy",
+      "required": true
+    }
+  ]
+}
