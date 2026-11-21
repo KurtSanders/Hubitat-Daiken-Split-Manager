@@ -5,6 +5,7 @@
   "minimumHEVersion": "2.3.5",
   "dateReleased": "2026-11-20",
   "documentationLink": "https://github.com/kurtsanders/Hubitat-Daiken-Split-Manager#readme",
+  "releaseNotes": "Daiken Split Manager is a native Parent App and Child Device Driver suite for Hubitat Elevation that provides 100% local monitoring and control of Wi-Fi-enabled Daikin mini-split indoor units using Daikin's local `/dsiot/multireq` JSON API (`DGC` protocol)—with **no cloud dependency** and **no Home Assistant or MQTT middleware** required.",
   "apps": [
     {
       "id": "d8e9a4c1-7b32-4f10-9a61-2c8e5d4b1001",
