@@ -15,18 +15,8 @@ flowchart LR
     HE["Hubitat Elevation<br/>(Daiken Split Manager App)"] --->|"HTTP POST<br/>/dsiot/multireq<br/>(Local LAN - Port 80)"| DK["Daikin Split Wi-Fi Adapter<br/>(DGC Protocol)"]
     DK --->|"JSON State Tree<br/>(rsc: 2000)"| HE
     HE --> CD["Daiken Split System<br/>(Child Thermostat Device)"]
-    CD --> RM["Rule Machine /<br/>Dashboards /<br/>Apple Home"]
+    CD --> RM["Rule Machine /<br/>Dashboards"]
 ```
-
-
-```mermaid
-flowchart LR
-    HE["Hubitat Elevation<br/>(Daiken Split Manager App)"] -- "HTTP POST /dsiot/multireq<br/>(Local LAN - Port 80)" --> DK["Daikin Split Wi-Fi Adapter<br/>(DGC Protocol)"]
-    DK -- "JSON State Tree (rsc: 2000)" --> HE
-    HE --> CD["Daiken Split System<br/>(Child Thermostat Device)"]
-    CD --> RM["Rule Machine / Dashboards / Apple Home"]
-```
-
 ---
 
 ## Key Features
