@@ -10,13 +10,11 @@
 
 ## Architecture Overview
 %%{init: {'flowchart': {'nodeSpacing': 80, 'rankSpacing': 80}}}%%
-```mermaid
 flowchart LR
     HE["Hubitat Elevation<br/>(Daiken Split Manager App)"] -- "HTTP POST /dsiot/multireq<br/>(Local LAN - Port 80)" --> DK["Daikin Split Wi-Fi Adapter<br/>(DGC Protocol)"]
     DK -- "JSON State Tree (rsc: 2000)" --> HE
     HE --> CD["Daiken Split System<br/>(Child Thermostat Device)"]
-    CD --> RM["Rule Machine / Dashboards / Apple Home"]
-```
+    CD --> RM["Rule Machine / Dashboards / Apple Home"]   
 
 ---
 
