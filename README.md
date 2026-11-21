@@ -11,11 +11,18 @@
 ## Architecture Overview
 
 ```mermaid
-flowchart LR
-    HE["Hubitat Elevation<br/>(Daiken Split Manager App)"] --->|"HTTP POST<br/>/dsiot/multireq<br/>(Local LAN - Port 80)"| DK["Daikin Split Wi-Fi Adapter<br/>(DGC Protocol)"]
+flowchart TD
+    HE["Hubitat Elevation<br/>(Daiken Split Manager App)"] 
+    HE --> PS["Dynamic Active / Idle Polling"]
+    PS --> MD{"Valid Hubitat Mode?"}
+    MD -->|Yes| SH[Continue]
+    MD -->|No| ST([Stop])
+    SH --->|"HTTP POST<br/>/dsiot/multireq<br/>(Local LAN - Port 80)"| DK["Daikin Split Wi-Fi Adapter<br/>(DGC Protocol)"]
     DK --->|"JSON State Tree<br/>(rsc: 2000)"| HE
     HE --> CD["Daiken Split System<br/>(Child Thermostat Device)"]
     CD --> RM["Rule Machine /<br/>Dashboards"]
+
+    
 ```
 ---
 
@@ -79,7 +86,7 @@ curl -s -X POST "[http://10.0.0.136/dsiot/multireq](http://10.0.0.136/dsiot/mult
 
 ## 2. Installation via Hubitat Package Manager (HPM)
 
-<img src="images/hpm-install.jpg" alt="Hubitat Package Manager Install" width="600" height="400">
+<img src="images/hpm-install.jpg" alt="Hubitat Package Manager Install" height="400">
 
 
 ### Option A: Install by Searching HPM (Recommended)
