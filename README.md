@@ -40,7 +40,7 @@ flowchart TD
 * **Dynamic Active / Idle Polling:** Automatically polls faster (e.g., every 30 seconds) whenever **any** Daikin unit switch is `ON`, and drops back to a slower interval (e.g., every 5 minutes) when **all** units are `OFF`.
 * **Hubitat Mode Restrictions:** Optionally restrict background polling to specific Hubitat Modes (such as `Home` or `Morning`) to minimize hub load when away or asleep.
 * **Full Thermostat & Daikin-Specific Controls:**
-  * Thermostat Modes (`heat`, `cool`, `auto`, `dry`, `fanOnly`), and Heating/Cooling Setpoints (`°F` or `°C`).
+  * Power On/Off, Thermostat Modes (`heat`, `cool`, `auto`, `dry`, `fanOnly`), and Heating/Cooling Setpoints (`°F` or `°C`).
   * Fan Speeds (`Auto`, `Quiet`, `Level 1` through `Level 5`).
   * **Vertical** and **Horizontal** louver swing toggles.
   * **Econo Mode** **'On'** and **'Off'** device driver commands.
