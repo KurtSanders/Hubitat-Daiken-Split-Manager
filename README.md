@@ -40,10 +40,10 @@ flowchart TD
 * **Dynamic Active / Idle Polling:** Automatically polls faster (e.g., every 30 seconds) whenever **any** Daikin unit switch is `ON`, and drops back to a slower interval (e.g., every 5 minutes) when **all** units are `OFF`.
 * **Hubitat Mode Restrictions:** Optionally restrict background polling to specific Hubitat Modes (such as `Home` or `Morning`) to minimize hub load when away or asleep.
 * **Full Thermostat & Daikin-Specific Controls:**
-  * Power (`on` / `off`), Thermostat Modes (`heat`, `cool`, `auto`, `dry`, `fanOnly`), and Heating/Cooling Setpoints (`°F` or `°C`).
+  * Thermostat Modes (`heat`, `cool`, `auto`, `dry`, `fanOnly`), and Heating/Cooling Setpoints (`°F` or `°C`).
   * Fan Speeds (`Auto`, `Quiet`, `Level 1` through `Level 5`).
   * **Vertical** and **Horizontal** louver swing toggles.
-  * **Econo Mode** and **Powerful Mode** toggles.
+  * **Econo Mode** **'On'** and **'Off'** device driver commands.
   * Indoor temperature, outdoor ambient temperature, indoor relative humidity, daily energy consumption (`kWh`), and daily runtime (`min`).
 
 ---
@@ -159,8 +159,7 @@ If you are installing before the package appears in the HPM master repository in
 | `fanSpeed` | `string` | Active fan speed (`Auto`, `Quiet`, `Level 1` – `Level 5`) |
 | `verticalSwing` | `string` | Vertical louver oscillation (`On` / `Off`) |
 | `horizontalSwing` | `string` | Horizontal louver oscillation (`On` / `Off`) |
-| `econoMode` | `string` | Daikin Econo power-saving mode (`On` / `Off`) |
-| `powerfulMode` | `string` | Daikin 20-minute Powerful boost mode (`On` / `Off`) |
+| `econoMode` | `string` | Daikin Econo power-saving mode (`On` / `Off` |
 | `runtimeToday` | `number` | Daily compressor/indoor runtime in minutes |
 
 ### Custom Commands
@@ -170,6 +169,5 @@ If you are installing before the package appears in the HPM master repository in
 | `setVerticalSwing` | `On`, `Off` | Enables or disables vertical louver swing |
 | `setHorizontalSwing` | `On`, `Off` | Enables or disables horizontal louver swing (if supported by indoor unit) |
 | `setEconoMode` / `econoOn` / `econoOff` | `On`, `Off` | Toggles Daikin Econo current-limiting mode |
-| `setPowerfulMode` / `powerfulOn` / `powerfulOff` | `On`, `Off` | Toggles Daikin Powerful boost mode |
 | `dry` | None | Powers on the unit in Dehumidify (`dry`) mode |
 | `fanOnly` | None | Powers on the unit in Fan-Only circulation mode |
