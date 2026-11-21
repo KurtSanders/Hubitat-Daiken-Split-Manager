@@ -4,6 +4,10 @@
 [![Local API](https://img.shields.io/badge/Connection-100%25%20Local%20HTTP%2FJSON-blue.svg)](#1-verify-your-daikin-split-is-wi-fi-connected--compatible)
 [![HPM Compatible](https://img.shields.io/badge/Hubitat%20Package%20Manager-Supported-orange.svg)](#2-installation-via-hubitat-package-manager-hpm)
 
+<img src="images/DaikinHeadUnit.jpg" alt="Hubitat Package Manager Install">
+
+
+
 **Daiken Split Manager** is a native Parent App and Child Device Driver suite for **Hubitat Elevation** that provides 100% local monitoring and control of Wi-Fi-enabled Daikin mini-split indoor units using Daikin's local `/dsiot/multireq` JSON API (`DGC` protocol)—with **no cloud dependency** and **no Home Assistant or MQTT middleware** required.
 
 ---
