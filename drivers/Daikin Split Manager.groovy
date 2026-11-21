@@ -63,7 +63,6 @@ metadata {
         attribute "verticalSwing", "string"
         attribute "horizontalSwing", "string"
         attribute "econoMode", "string"
-        attribute "powerfulMode", "string"
         attribute "runtimeToday", "number"
 
         command "setFanSpeed", [[
@@ -88,13 +87,6 @@ metadata {
         ]]
         command "econoOn"
         command "econoOff"
-        command "setPowerfulMode", [[
-            name: "Powerful Mode*",
-            type: "ENUM",
-            constraints: ["On", "Off"]
-        ]]
-        command "powerfulOn"
-        command "powerfulOff"
         command "dry"
         command "fanOnly"
     }
@@ -238,9 +230,9 @@ private void parseDgcStatus(Map pc) {
     BigDecimal heatC = heatHex ? (Integer.parseInt(heatHex, 16) / 2.0) : 20.0
     BigDecimal autoC = autoHex ? (Integer.parseInt(autoHex, 16) / 2.0) : 21.0
 
-    BigDecimal displayCool = formatTempForHub(coolC)
-    BigDecimal displayHeat = formatTempForHub(heatC)
-    BigDecimal activeSetpoint = (rawMode == "auto") ? formatTempForHub(autoC) : ((rawMode == "heat") ? displayHeat : displayCool)
+    Integer displayCool = formatTempForHub(coolC)
+    Integer displayHeat = formatTempForHub(heatC)
+    Integer activeSetpoint = (rawMode == "auto") ? formatTempForHub(autoC) : ((rawMode == "heat") ? displayHeat : displayCool)
 
     String unitStr = "°${location.temperatureScale}"
     sendEventIfChanged("coolingSetpoint", displayCool, unitStr)
@@ -266,29 +258,26 @@ private void parseDgcStatus(Map pc) {
     boolean hSwingOn = (hSwingHex != null && !hSwingHex.startsWith("00"))
     sendEventIfChanged("horizontalSwing", hSwingOn ? "On" : "Off")
 
-    // 3. Special Modes: Powerful & Econo (e_3003)
+    // 3. Special Modes: Econo (e_3003 -> p_24)
     def e3003 = findChildNode(root, "e_3003")
-    String powerfulHex = getParamValue(e3003, "p_02") ?: "00"
-    String econoHex    = getParamValue(e3003, "p_1D") ?: "00"
-    sendEventIfChanged("powerfulMode", (powerfulHex == "01") ? "On" : "Off")
-    sendEventIfChanged("econoMode", (econoHex == "01") ? "On" : "Off")
+    String econoHex = getParamValue(e3003, "p_24") ?: "00"
+    boolean isEcono = !(econoHex in ["00", "0000"])
+    sendEventIfChanged("econoMode", isEcono ? "On" : "Off")
 
     // 4. Sensors: Indoor Temp, Outdoor Temp, Humidity (e_A00B)
     def eA00B = findChildNode(root, "e_A00B")
-    String outHex = getParamValue(eA00B, "p_01")
+    String inHex  = getParamValue(eA00B, "p_01")
     String humHex = getParamValue(eA00B, "p_02")
-    String inHex  = getParamValue(eA00B, "p_05")
+    String outHex = getParamValue(eA00B, "p_05")
 
-    if (inHex && inHex.length() >= 4) {
-        int rawIn = parseLittleEndianSigned16(inHex)
-        BigDecimal inC = (Math.abs(rawIn) > 100) ? (rawIn / 10.0) : (rawIn as BigDecimal)
+    if (inHex && inHex.length() >= 2) {
+        BigDecimal inC = parseIndoorTempHex(inHex)
         sendEventIfChanged("temperature", formatTempForHub(inC), unitStr)
     }
 
-    if (outHex && outHex.length() >= 2) {
-        int rawOut = Integer.parseInt(outHex.substring(0, 2), 16)
-        if (rawOut > 127) rawOut -= 256
-        sendEventIfChanged("outdoorTemperature", formatTempForHub(rawOut as BigDecimal), unitStr)
+    if (outHex && outHex.length() >= 2 && outHex != "00" && outHex != "0000") {
+        BigDecimal outC = parseOutdoorTempHex(outHex)
+        sendEventIfChanged("outdoorTemperature", formatTempForHub(outC), unitStr)
     }
 
     if (humHex && humHex.length() >= 2) {
@@ -302,7 +291,7 @@ private void parseDgcStatus(Map pc) {
     String runtimeHex = getParamValue(e2028, "p_04")
 
     if (energyHex && energyHex.length() >= 4) {
-        BigDecimal kwh = parseLittleEndianUnsigned16(energyHex) / 10.0
+        Integer kwh = Math.round(parseLittleEndianUnsigned16(energyHex) / 10.0) as Integer
         sendEventIfChanged("energy", kwh, "kWh")
     }
     if (runtimeHex && runtimeHex.length() >= 4) {
@@ -430,19 +419,11 @@ def setHorizontalSwing(String stateStr) {
 
 def setEconoMode(String stateStr) {
     String hex = (stateStr?.equalsIgnoreCase("On")) ? "01" : "00"
-    writeDsiotNodes([[pn: "e_3003", pch: [[pn: "p_1D", pv: hex]]]])
+    writeDsiotNodes([[pn: "e_3003", pch: [[pn: "p_24", pv: hex]]]])
 }
 
 def econoOn() { setEconoMode("On") }
 def econoOff() { setEconoMode("Off") }
-
-def setPowerfulMode(String stateStr) {
-    String hex = (stateStr?.equalsIgnoreCase("On")) ? "01" : "00"
-    writeDsiotNodes([[pn: "e_3003", pch: [[pn: "p_02", pv: hex]]]])
-}
-
-def powerfulOn() { setPowerfulMode("On") }
-def powerfulOff() { setPowerfulMode("Off") }
 
 def setSchedule(schedule) {
     // Required by Hubitat Thermostat capability; no-op
@@ -527,9 +508,30 @@ private int parseLittleEndianSigned16(String hex4) {
     return (val > 32767) ? (val - 65536) : val
 }
 
-private BigDecimal formatTempForHub(BigDecimal tempC) {
+private BigDecimal parseIndoorTempHex(String hexStr) {
+    if (hexStr.length() >= 4) {
+        int raw16 = parseLittleEndianSigned16(hexStr.substring(0, 4))
+        if (Math.abs(raw16) > 120) return raw16 / 10.0
+        return raw16 / 2.0
+    }
+    int raw8 = Integer.parseInt(hexStr.substring(0, 2), 16)
+    if (raw8 > 127) raw8 -= 256
+    return raw8 as BigDecimal
+}
+
+private BigDecimal parseOutdoorTempHex(String hexStr) {
+    if (hexStr.length() >= 4) {
+        int raw16 = parseLittleEndianSigned16(hexStr.substring(0, 4))
+        return raw16 / 10.0
+    }
+    int raw8 = Integer.parseInt(hexStr.substring(0, 2), 16)
+    if (raw8 > 127) raw8 -= 256
+    return raw8 as BigDecimal
+}
+
+private Integer formatTempForHub(BigDecimal tempC) {
     BigDecimal val = (location.temperatureScale == "F") ? celsiusToFahrenheit(tempC) : tempC
-    return Math.round(val * 10.0) / 10.0
+    return Math.round(val) as Integer
 }
 
 private String tempToDaikinHex(BigDecimal hubTemp, BigDecimal minC, BigDecimal maxC) {
