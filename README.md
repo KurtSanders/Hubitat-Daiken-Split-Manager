@@ -11,6 +11,10 @@
 ## Architecture Overview
 
 ```mermaid
+---
+config:
+  theme: forest
+---
 flowchart TD
     HE["Hubitat Elevation<br/>(Daiken Split Manager App)"] 
     HE --> PS["Dynamic Active / Idle Polling"]
@@ -21,8 +25,11 @@ flowchart TD
     DK --->|"JSON State Tree<br/>(rsc: 2000)"| HE
     HE --> CD["Daiken Split System<br/>(Child Thermostat Device)"]
     CD --> RM["Rule Machine /<br/>Dashboards"]
-
-    
+    classDef hubitat fill:#e6f4ea,stroke:#1e8e3e,stroke-width:2px,color:#0d652d
+    classDef daikin fill:#e8f0fe,stroke:#1a73e8,stroke-width:2px,color:#174ea6
+    classDef external fill:#fef7e0,stroke:#f9ab00,stroke-width:2px,color:#b060
+    class HE,CD,RM hubitat
+    class MD daikin
 ```
 ---
 
