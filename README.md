@@ -105,9 +105,9 @@ curl -s -X POST "[http://10.0.0.136/dsiot/multireq](http://10.0.0.136/dsiot/mult
 ### Option B: Install Directly via Manifest URL in HPM
 If you are installing before the package appears in the HPM master repository index:
 1. Open **Apps -> Hubitat Package Manager -> Install -> From a URL**.
-2. Paste the raw GitHub URL to `packageManifest.json`:
+2. Paste the raw GitHub URL in the field to `packageManifest.json`:
    ```text
-   [https://raw.githubusercontent.com/kurtsanders/Hubitat-Daiken-Split-Manager/main/packageManifest.json](https://raw.githubusercontent.com/kurtsanders/Hubitat-Daiken-Split-Manager/main/packageManifest.json)
+   https://raw.githubusercontent.com/kurtsanders/Hubitat-Daiken-Split-Manager/main/packageManifest.json
    ```
 3. Click **Next** and follow the prompts to complete installation.
 
