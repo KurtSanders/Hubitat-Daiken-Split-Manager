@@ -79,7 +79,8 @@ curl -s -X POST "[http://10.0.0.136/dsiot/multireq](http://10.0.0.136/dsiot/mult
 
 ## 2. Installation via Hubitat Package Manager (HPM)
 
-![Hubitat Package Manager Install](images/hpm-install.png)
+<img src="images/hpm-install.jpg" alt="Hubitat .jpgPackage Manager Install" width="600" height="400">
+
 
 ### Option A: Install by Searching HPM (Recommended)
 1. In your Hubitat web interface, open **Apps -> Hubitat Package Manager**.
@@ -107,12 +108,12 @@ If you are installing before the package appears in the HPM master repository in
 1. In Hubitat, go to **Apps -> Add User App** and select **Daiken Split Manager**.
 2. Click **+ Add a Daikin Split Unit**.
 
-![Add a Daikin Split Unit](images/app-add-unit.png)
+![Add a Daikin Split Unit](images/app-add-unit.jpg)
 
 3. Enter a **Child Device Name** (for example, `Sunroom Split`) and the unit's static **IPv4 Address** (for example, `10.0.0.136`), then click **Next**.
 4. The app will immediately probe `http://<ip>:80/dsiot/multireq` to verify `rsc: 2000` and create your child thermostat device. Click **Next** to return to the main page.
 
-![Daiken Split Manager Configuration](images/app-main-config.png)
+![Daiken Split Manager Configuration](images/app-main-config.jpg)
 
 5. Configure your **Dynamic Polling & Hubitat Mode Restrictions**:
    * **Active Polling Frequency:** Select how often to poll when **any** Daikin unit switch is `ON` (default: `Every 30 Seconds`).
@@ -126,7 +127,7 @@ If you are installing before the package appears in the HPM master repository in
 
 ## 4. Child Device Capabilities, Attributes & Commands
 
-![Daiken Split System Device Page](images/device-detail.png)
+![Daiken Split System Device Page](images/device-detail.jpg)
 
 ### Standard Capabilities
 * `Thermostat`
